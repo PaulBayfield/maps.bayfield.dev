@@ -48,9 +48,9 @@ const ZoomControl = dynamic(
   { ssr: false }
 );
 const MarkerClusterGroup = dynamic(
-  () => import("react-leaflet-markercluster"),
+  () => import("react-leaflet-markercluster").then((mod) => mod.default),
   { ssr: false }
-);
+) as any;
 
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -113,7 +113,13 @@ export default function Map() {
     }
 
     setMarkers((prev) => [...prev, newMarker]);
-    setForm({ description: "", type: "monument" });
+    setForm(
+      {
+        title: "",
+        description: "",
+        type: "monument",
+      }
+    );
   };
 
   useEffect(() => {

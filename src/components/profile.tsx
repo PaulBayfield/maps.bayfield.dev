@@ -25,6 +25,10 @@ export default function Profile() {
 
   const user = session.user;
 
+  if (!user) {
+    return redirect("/");
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>

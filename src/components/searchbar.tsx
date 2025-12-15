@@ -47,7 +47,7 @@ export default function SearchBar() {
     const features = data.features || [];
 
     const uniqueFeatures = features.filter(
-      (f, i, arr) =>
+      (f: { properties: { name: any; type: any; }; geometry: { coordinates: number[]; }; }, i: any, arr: any[]) =>
         arr.findIndex(
           (x) =>
             x.properties.name === f.properties.name &&
