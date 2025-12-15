@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import AuthentikProvider from "next-auth/providers/authentik";
+import type { JWT } from "next-auth/jwt";
 
-
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     AuthentikProvider({
       id: "maps",
@@ -16,12 +16,14 @@ export const authOptions = {
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (user) token.user = user;
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
       return token;
     },
     async session({ session, token }) {
-      session.user = token.user as any;
+      session.user = token.user as typeof session.user;
       return session;
     },
   },
