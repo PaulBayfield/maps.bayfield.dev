@@ -6,6 +6,10 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
+# Set build-time variables as environment variables
+ARG NEXT_PUBLIC_APP_ADMIN_EMAIL
+ENV NEXT_PUBLIC_APP_ADMIN_EMAIL=${NEXT_PUBLIC_APP_ADMIN_EMAIL}
+
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
