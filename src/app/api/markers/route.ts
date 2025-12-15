@@ -7,6 +7,15 @@ import { getServerSession } from "next-auth";
 const db = new Database("markers.db");
 
 
+type Marker = {
+  lat: number;
+  lon: number;
+  description: string;
+  type: string;
+};
+
+
+
 db.prepare(`
   CREATE TABLE IF NOT EXISTS markers (
     lat REAL,
@@ -19,7 +28,9 @@ db.prepare(`
 export async function GET() {
   const session = await getServerSession(authOptions);
 
-  let markers = db.prepare("SELECT * FROM markers").all();
+  let markers = db
+    .prepare("SELECT * FROM markers")
+    .all() as Marker[];
 
   if (!session) {
     markers = markers.filter(
