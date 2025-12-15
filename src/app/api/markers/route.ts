@@ -4,7 +4,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
 
-const db = new Database("markers.db");
+const db = new Database("./data/markers.db");
 
 
 type Marker = {
