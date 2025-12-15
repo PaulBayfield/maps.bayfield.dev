@@ -66,6 +66,20 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'react-leaflet-markercluster/styles'
 import { useTranslations } from "next-intl";
 
+const TYPE_LABEL_MAP: { [key: string]: string } = {
+  tout: "all",
+  monument: "monuments",
+  maison: "houses",
+  musee: "museums",
+  zoo: "zoos",
+  parc: "parks",
+  ville: "cities",
+  aeroport: "airports",
+  gite: "lodgings",
+  restaurant: "restaurants",
+  famille: "family",
+};
+
 export default function Map() {
   const [markers, setMarkers] = useState<any[]>([]);
   const [clickedLocation, setClickedLocation] = useState<any>(null);
@@ -75,19 +89,7 @@ export default function Map() {
     description: "",
     type: "monument",
   });
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([
-    "tout",
-    "monument",
-    "maison",
-    "musee",
-    "zoo",
-    "parc",
-    "ville",
-    "aeroport",
-    "gite",
-    "restaurant",
-    "famille"
-  ]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const t = useTranslations("Map");
 
@@ -147,7 +149,11 @@ export default function Map() {
   useEffect(() => {
     fetch("/api/markers")
       .then((res) => res.json())
-      .then((data) => setMarkers(data));
+      .then((data) => {
+        setMarkers(data);
+        const types = Array.from(new Set(data.map((m: any) => m.type)));
+        setSelectedTypes(types);
+      });
   }, []);
 
   const filteredMarkers = markers.filter(m => selectedTypes.includes(m.type));
@@ -163,20 +169,7 @@ export default function Map() {
   };
 
   const getTypeLabel = (type: string) => {
-    const typeMap: { [key: string]: string } = {
-      tout: "all",
-      monument: "monuments",
-      maison: "houses",
-      musee: "museums",
-      zoo: "zoos",
-      parc: "parks",
-      ville: "cities",
-      aeroport: "airports",
-      gite: "lodgings",
-      restaurant: "restaurants",
-      famille: "family",
-    };
-    return t(typeMap[type] || type);
+    return t(TYPE_LABEL_MAP[type] || type);
   };
 
   return (
@@ -215,7 +208,7 @@ export default function Map() {
         <SearchBar/>
       </MapContainer>
 
-      <div className="absolute top-25 right-2 z-600">
+      <div className="absolute top-24 right-2 z-[600]">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
