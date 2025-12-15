@@ -1,0 +1,37 @@
+{
+    "Header": {
+        "sub-title": "Le monde, vu à travers les lieux que j’ai déjà visités ッ"
+    },
+    "SearchBar": {
+        "placeholder": "Rechercher un lieu...",
+        "unnamed": "Sans nom"
+    },
+    "Auth": {
+        "sign-out": "Se déconnecter"
+    },
+    "Profile": {
+        "profile": "Profil",
+        "profile-description": "Connecté via Single Sign-On • Authentik",
+        "name": "Nom",
+        "email": "Email",
+        "read-only-info": "Les informations affichées ici sont en lecture seule. Pour mettre à jour vos coordonnées, veuillez visiter le fournisseur d'identité de votre organisation."
+    },
+    "Map": {
+        "add-location": "Ajouter un nouveau lieu",
+        "add-location-description": "Fournissez des détails pour l'endroit sur lequel vous avez cliqué sur la carte",
+        "description": "Description",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "all": "Tous",
+        "monuments": "Monuments",
+        "houses": "Maison",
+        "museums": "Musées",
+        "zoos": "Zoos",
+        "parks": "Parcs",
+        "cities": "Villes",
+        "airports": "Aéroports",
+        "lodgings": "Hébergements",
+        "restaurants": "Restaurants",
+        "family": "Famille"
+    }
+}

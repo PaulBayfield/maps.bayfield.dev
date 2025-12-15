@@ -1,0 +1,37 @@
+{
+    "Header": {
+        "sub-title": "The world, seen through places I've visited ッ"
+    },
+    "SearchBar": {
+        "placeholder": "Search for a place...",
+        "unnamed": "Unnamed"
+    },
+    "Auth": {
+        "sign-out": "Sign out"
+    },
+    "Profile": {
+        "profile": "Profile",
+        "profile-description": "Logged in via Single Sign-On • Authentik",
+        "name": "Name",
+        "email": "Email",
+        "read-only-info": "The information displayed here is read-only. To update your details, please visit your organisation's identity provider."
+    },
+    "Map": {
+        "add-location": "Add a new location",
+        "add-location-description": "Provide details for the place you clicked on the map",
+        "description": "Description",
+        "save": "Save",
+        "cancel": "Cancel",
+        "all": "All",
+        "monuments": "Monuments",
+        "houses": "House",
+        "museums": "Museums",
+        "zoos": "Zoos",
+        "parks": "Parks",
+        "cities": "Cities",
+        "airports": "Airports",
+        "lodgings": "Lodgings",
+        "restaurants": "Restaurants",
+        "family": "Family"
+    }
+}
