@@ -12,7 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <SessionProvider>
+      <SessionProvider basePath="/api/auth">
         {children}
       </SessionProvider>
     </ThemeProvider>

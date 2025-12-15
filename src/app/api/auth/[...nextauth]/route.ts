@@ -1,6 +1,5 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import AuthentikProvider from "next-auth/providers/authentik";
-import type { JWT } from "next-auth/jwt";
 
 export const authOptions: NextAuthOptions = {
   providers: [
