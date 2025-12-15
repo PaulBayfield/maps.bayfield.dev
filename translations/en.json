@@ -33,5 +33,31 @@
         "lodgings": "Lodgings",
         "restaurants": "Restaurants",
         "family": "Family"
+    },
+    "ErrorPage": {
+        "400": {
+            "title": "400 - Bad Request",
+            "description": "Oops! The request you sent to the server is incorrect.",
+            "home": "Go back home",
+            "report": "Report a problem"
+        },
+        "403": {
+            "title": "403 - Forbidden",
+            "description": "Oops! You do not have permission to access this page.",
+            "home": "Go back home",
+            "report": "Report a problem"
+        },
+        "404": {
+            "title": "404 - Page Not Found",
+            "description": "Oops! The page you are looking for does not exist.",
+            "home": "Go back home",
+            "report": "Report a problem"
+        },
+        "500": {
+            "title": "500 - Internal Server Error",
+            "description": "Oops! Something went wrong on our end.",
+            "home": "Go back home",
+            "report": "Report a problem"
+        }
     }
 }

@@ -33,5 +33,31 @@
         "lodgings": "Hébergements",
         "restaurants": "Restaurants",
         "family": "Famille"
+    },
+    "ErrorPage": {
+        "400": {
+            "title": "400 - Mauvaise Requête",
+            "description": "Oups ! La requête que vous avez envoyée au serveur est incorrecte.",
+            "home": "Retour à la maison",
+            "report": "Signaler un problème"
+        },
+        "403": {
+            "title": "403 - Accès Interdit",
+            "description": "Oups ! Vous n'avez pas la permission d'accéder à cette page.",
+            "home": "Retour à la maison",
+            "report": "Signaler un problème"
+        },
+        "404": {
+            "title": "404 - Page Non Trouvée",
+            "description": "Oups ! La page que vous cherchez n'existe pas.",
+            "home": "Retour à la maison",
+            "report": "Signaler un problème"
+        },
+        "500": {
+            "title": "500 - Erreur Interne du Serveur",
+            "description": "Oups ! Quelque chose s'est mal passé de notre côté.",
+            "home": "Retour à la maison",
+            "report": "Signaler un problème"
+        }
     }
 }
