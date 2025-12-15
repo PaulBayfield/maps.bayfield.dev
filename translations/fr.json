@@ -22,6 +22,7 @@
         "description": "Description",
         "save": "Enregistrer",
         "cancel": "Annuler",
+        "filter-markers": "Filtrer les marqueurs",
         "all": "Tous",
         "monuments": "Monuments",
         "houses": "Maison",
