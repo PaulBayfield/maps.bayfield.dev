@@ -22,6 +22,15 @@ import {
   SelectContent,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { FilterIcon } from "lucide-react";
 
 let L: typeof import("leaflet");
 if (typeof window !== "undefined") {
@@ -57,6 +66,20 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'react-leaflet-markercluster/styles'
 import { useTranslations } from "next-intl";
 
+const TYPE_LABEL_MAP: { [key: string]: string } = {
+  tout: "all",
+  monument: "monuments",
+  maison: "houses",
+  musee: "museums",
+  zoo: "zoos",
+  parc: "parks",
+  ville: "cities",
+  aeroport: "airports",
+  gite: "lodgings",
+  restaurant: "restaurants",
+  famille: "family",
+};
+
 export default function Map() {
   const [markers, setMarkers] = useState<any[]>([]);
   const [clickedLocation, setClickedLocation] = useState<any>(null);
@@ -66,6 +89,7 @@ export default function Map() {
     description: "",
     type: "monument",
   });
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const t = useTranslations("Map");
 
@@ -125,8 +149,28 @@ export default function Map() {
   useEffect(() => {
     fetch("/api/markers")
       .then((res) => res.json())
-      .then((data) => setMarkers(data));
+      .then((data) => {
+        setMarkers(data);
+        const types = Array.from(new Set(data.map((m: any) => m.type)));
+        setSelectedTypes(types);
+      });
   }, []);
+
+  const filteredMarkers = markers.filter(m => selectedTypes.includes(m.type));
+
+  const availableTypes = Array.from(new Set(markers.map(m => m.type)));
+
+  const toggleType = (type: string) => {
+    setSelectedTypes(prev =>
+      prev.includes(type)
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
+  };
+
+  const getTypeLabel = (type: string) => {
+    return t(TYPE_LABEL_MAP[type] || type);
+  };
 
   return (
     <section className="h-full w-full">
@@ -142,7 +186,7 @@ export default function Map() {
         />
 
         <MarkerClusterGroup chunkedLoading>
-          {markers.map((m, i) => (
+          {filteredMarkers.map((m, i) => (
             <Marker key={i} position={[m.lat, m.lon]} icon={
               L.icon({
                 iconUrl: `/map/${m.type}.svg`,
@@ -163,6 +207,33 @@ export default function Map() {
         <LocationMarker />
         <SearchBar/>
       </MapContainer>
+
+      <div className="absolute top-24 right-2 z-[600]">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="secondary" 
+              size="icon"
+              className="backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-zinc-950/50 bg-white/70 dark:bg-zinc-950/70 border-b border-zinc-200/60 dark:border-zinc-800/60 shadow-md"
+            >
+              <FilterIcon className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>{t("filter-markers")}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {availableTypes.map((type) => (
+              <DropdownMenuCheckboxItem
+                key={type}
+                checked={selectedTypes.includes(type)}
+                onCheckedChange={() => toggleType(type)}
+              >
+                {getTypeLabel(type)}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
