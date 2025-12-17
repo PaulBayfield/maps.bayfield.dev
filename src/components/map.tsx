@@ -149,10 +149,10 @@ export default function Map() {
   useEffect(() => {
     fetch("/api/markers")
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: any[]) => {
         setMarkers(data);
-        const types = Array.from(new Set(data.map((m: any) => m.type)));
-        setSelectedTypes(types);
+        const types = Array.from(new Set(data.map((m: any) => String(m.type))));
+        setSelectedTypes(types as string[]);
       });
   }, []);
 
