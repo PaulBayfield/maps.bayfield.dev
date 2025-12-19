@@ -77,7 +77,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <UmamiProvider
-          websiteId="693d9057-a8ae-4f33-af14-3e35d1ee41f0"
+          websiteId="bdafc5fa-3629-4d6e-ba54-2eb9e7b8cf0e"
           src="https://analytics.bayfield.dev/script.js"
         />
       </head>
