@@ -363,7 +363,7 @@ export default function MapComponent() {
 
   return (
     <section className="h-full w-full">
-      <Map center={[2.3522219, 48.856614]} zoom={6}>
+      <Map center={[2.3522219, 48.856614]} zoom={6} projection={{type: "globe"}}>
         <SvgClusterLayer
           data={geoJsonData}
           clusterColors={["#60a5fa", "#3b82f6", "#1d4ed8"]}
