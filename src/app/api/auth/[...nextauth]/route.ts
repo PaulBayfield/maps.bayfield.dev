@@ -1,6 +1,9 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import AuthentikProvider from "next-auth/providers/authentik";
 
+const cookiePrefix = (process.env.COOKIE_PREFIX ?? "app").replace(/\./g, "-");
+const secure = process.env.NODE_ENV === "production";
+
 export const authOptions: NextAuthOptions = {
   providers: [
     AuthentikProvider({
@@ -14,6 +17,20 @@ export const authOptions: NextAuthOptions = {
   ],
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}.session-token`,
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure },
+    },
+    callbackUrl: {
+      name: `${cookiePrefix}.callback-url`,
+      options: { sameSite: "lax", path: "/", secure },
+    },
+    csrfToken: {
+      name: `${cookiePrefix}.csrf-token`,
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure },
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
