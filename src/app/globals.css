@@ -119,6 +119,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  .maplibregl-popup-content {
+    @apply !bg-transparent !shadow-none !p-0 !rounded-none;
+  }
+  .maplibregl-popup-tip {
+    @apply !hidden;
+  }
 }
 
 html {
@@ -147,18 +153,3 @@ html {
   }
 }
 
-.dark .leaflet-container {
-  background-color: var(--background);
-}
-
-.dark .leaflet-tile-pane, .dark .leaflet-popup {
-  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-}
-
-.dark .leaflet-marker-icon {
-  filter: invert(10%) brightness(100%) contrast(100%);
-}
-
-.dark .marker-cluster {
-  filter: invert(100%) hue-rotate(180deg) brightness(200%) contrast(80%);
-}

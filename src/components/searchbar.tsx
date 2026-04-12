@@ -1,24 +1,10 @@
 "use client";
 
-import { useMap } from "react-leaflet";
+import { useMap, MapMarker, MarkerContent, MarkerPopup } from "@/components/ui/map";
 import { Input } from "./ui/input";
 import { Card, CardContent } from "./ui/card";
 import { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Popup = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Popup),
-  { ssr: false }
-);
-let L: typeof import("leaflet");
-if (typeof window !== "undefined") {
-  L = require("leaflet");
-}
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -26,7 +12,7 @@ export default function SearchBar() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [activeMarkerData, setActiveMarkerData] = useState<any>(null);
   const [tempMarker, setTempMarker] = useState<[number, number] | null>(null);
-  const map = useMap();
+  const { map } = useMap();
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const t = useTranslations("SearchBar");
@@ -37,17 +23,19 @@ export default function SearchBar() {
     setQuery(q);
 
     if (!q || q.length < 2) return setResults([]);
-    const { lat, lng } = map.getCenter();
+
+    const center = map?.getCenter();
+    const lat = center?.lat ?? 48.856614;
+    const lng = center?.lng ?? 2.3522219;
+
     const res = await fetch(
-      `/api/search?q=${encodeURIComponent(q)}&lat=${encodeURIComponent(
-        lat
-      )}&lon=${encodeURIComponent(lng)}`
+      `/api/search?q=${encodeURIComponent(q)}&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`
     );
     const data = await res.json();
     const features = data.features || [];
 
     const uniqueFeatures = features.filter(
-      (f: { properties: { name: any; type: any; }; geometry: { coordinates: number[]; }; }, i: any, arr: any[]) =>
+      (f: { properties: { name: any; type: any }; geometry: { coordinates: number[] } }, i: any, arr: any[]) =>
         arr.findIndex(
           (x) =>
             x.properties.name === f.properties.name &&
@@ -65,11 +53,11 @@ export default function SearchBar() {
 
   const handleSelect = (place: any) => {
     const [lon, lat] = place.geometry.coordinates;
-    map.setView([lat, lon], 15);
+    map?.flyTo({ center: [lon, lat], zoom: 15 });
     setQuery(place.properties.name || "");
     setActiveMarkerData(place);
     setResults([]);
-    setTempMarker([lat, lon]); // Set temporary marker
+    setTempMarker([lon, lat]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -97,8 +85,7 @@ export default function SearchBar() {
 
   return (
     <>
-      <div className="search-bar absolute top-25 left-2 z-600 w-50 sm:w-60 md:w-70 lg:w-80
-      bg-white dark:bg-zinc-900 shadow-md rounded-md p-2 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-zinc-950/50 bg-white/70 dark:bg-zinc-950/70 border-b border-zinc-200/60 dark:border-zinc-800/60">
+      <div className="search-bar absolute top-25 left-2 z-[400] w-50 sm:w-60 md:w-70 lg:w-80 bg-white dark:bg-zinc-900 shadow-md rounded-md p-2 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-zinc-950/50 bg-white/70 dark:bg-zinc-950/70 border-b border-zinc-200/60 dark:border-zinc-800/60">
         <Input
           value={query}
           placeholder={t("placeholder")}
@@ -131,39 +118,39 @@ export default function SearchBar() {
       </div>
 
       {tempMarker && (
-        <Marker
-          position={tempMarker}
-          icon={L.icon(
-            { 
-              iconUrl: "/map/tout.svg", 
-              iconSize: [32, 32],
-              iconAnchor: [15, 30],
-              popupAnchor: [1, -30],
-            }
-          )}
-          eventHandlers={{
-            click: () => {
-              map.setView(tempMarker, 15);
-            },
-          }}
-        >
-          <Popup>
-            <div>
-              <strong>{activeMarkerData?.properties.name || t("unnamed")}</strong>
-              <br />
-              {activeMarkerData?.properties.state || t("unnamed")}
-              <br />
-              {activeMarkerData?.properties.county || t("unnamed")}
-              <br />
-              {activeMarkerData?.properties.postcode || t("unnamed")}
-              <br />
-              {activeMarkerData?.properties.city || ""}
-              {activeMarkerData?.properties.type
-                ? ` (${activeMarkerData.properties.type})`
-                : ""}
+        <MapMarker longitude={tempMarker[0]} latitude={tempMarker[1]}>
+          <MarkerContent>
+            <div className="size-5 rounded-full bg-blue-500 border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform" />
+          </MarkerContent>
+          <MarkerPopup>
+            <div className="space-y-1 p-2">
+              <strong className="text-sm">
+                {activeMarkerData?.properties.name || t("unnamed")}
+              </strong>
+              {activeMarkerData?.properties.state && (
+                <p className="text-xs text-muted-foreground">
+                  {activeMarkerData.properties.state}
+                </p>
+              )}
+              {activeMarkerData?.properties.county && (
+                <p className="text-xs text-muted-foreground">
+                  {activeMarkerData.properties.county}
+                </p>
+              )}
+              {activeMarkerData?.properties.postcode && (
+                <p className="text-xs text-muted-foreground">
+                  {activeMarkerData.properties.postcode}
+                </p>
+              )}
+              {(activeMarkerData?.properties.city || activeMarkerData?.properties.type) && (
+                <p className="text-xs text-muted-foreground">
+                  {activeMarkerData.properties.city}
+                  {activeMarkerData.properties.type ? ` (${activeMarkerData.properties.type})` : ""}
+                </p>
+              )}
             </div>
-          </Popup>
-        </Marker>
+          </MarkerPopup>
+        </MapMarker>
       )}
     </>
   );
