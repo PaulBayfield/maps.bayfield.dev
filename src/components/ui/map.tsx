@@ -21,6 +21,10 @@ import { X, Minus, Plus, Locate, Maximize, Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+// The bundled maplibre-gl can't locate its worker module, so point it at the
+// copy served from /public (see scripts/copy-maplibre-worker.mjs)
+MapLibreGL.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+
 const defaultStyles = {
   dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
   light: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
