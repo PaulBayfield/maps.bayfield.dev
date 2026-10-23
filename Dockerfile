@@ -1,4 +1,4 @@
-FROM alpine:3.19 AS base
+FROM node:24-alpine AS base
 
 # Next.js app lives here
 WORKDIR /app
@@ -14,7 +14,7 @@ ENV NEXT_PUBLIC_APP_ADMIN_EMAIL=${NEXT_PUBLIC_APP_ADMIN_EMAIL}
 FROM base AS build
 
 # Install packages needed to build node modules
-RUN apk -U add build-base gyp pkgconfig python3 nodejs npm
+RUN apk add --no-cache build-base pkgconfig python3
 
 # Install node modules
 COPY --link package-lock.json package.json ./
@@ -30,9 +30,6 @@ RUN npm run build
 RUN npm prune --omit=dev --force
 
 FROM base AS run
-
-# Install node.js
-RUN apk add nodejs
 
 # Copy standalone app
 COPY --from=build /app/.next/standalone /app
